@@ -1,0 +1,298 @@
+유니티 공부
+
+씬 = 레벨
+
+씬 탭-> 씬이 보여짐
+게임 탭-> 카메라 객체를 통해서 볼 수 있는 화면이 보여짐
+
+인스펙터: 게임 오브젝트의 특정 값들을 조정하거나 설정할 수 있음.
+게임오브젝트는 각자 고유의 구성요소(컴포넌트)를 가지고 있으며, 또한 기존에 가지고 있지 않던 컴포넌트를 추가 할 수도 있음 ex)Rigid Body
+
+스프라이트: 2D이미지, 비트맵 이미지로 되어 있음.
+
+ctrl+d: 객체 복사
+
+특정 객체가 또다른 객체의 레이어위에서 보이게 하고 싶을때는 해당 객체의 인스펙터 창에서 order in layer을 또다른 객체의 값보다 크게 만들면 된다.
+
+start(): 콜백(플레이 버튼을 누르면 실행)
+Update(): 게임이 실행되는 매 프레임마다 실행
+
+게임 디자인의 가장 큰 3개의 틀
+플레이어 경험: 플레이어가 어떤 느낌의 경험을 하게 만들 것인가
+핵심 구조: 게임은 어떤 식으로 진행되는가
+게임 루프: 게임의 시작과 끝의 구조는 어떻게 되어있는가
+
+메서드랑 함수랑 비슷한 개념임.
+(메서드-> 객체가 있는 언어 / 함수-> 객체가 없는 언어)
+즉, 뭔가를 실행시켜주는 블럭
+
+메서드를 create할 때는 메서드 이름과 수행할 작업을 지정해야 함
+그리고 메서드를 이용하려면 call해야함
+
+class는 비슷한 것들을 하나의 클래스로 그룹화 하는 것.
+
+유니티에서 넘겨주는 인수값에서 부동소수값을 사용할려면 끝에 f를 붙여줘야 함
+ex) Rotate(0,0,0.1f);
+
+변수의 자료형이 float이더라도 값에 정수를 넣을'순' 있음
+ex) float x = 1;
+
+C#에서의 대표적인 변수
+int, float, double, bool, string, char...
+
+메서드 목록
+Debug.log(): 콘솔창에 printf
+transfrom.Rotate(x,y,z): 오브젝트를 회전
+transfrom.Translate(x,y,z): 오브젝트를 이동
+[SerializeField] 변수명: 변수의 직렬화 (변수 값을 inspector에서 바로 접근할 수 있도록 함, 단 스크립트 상에서의 변수값은 그대로임. 덮어쓰기 느낌)
+
+키보드 입력
+구 버전 -> 명칭을 정확하게 알아야 함.(String으로 참조해야하기 때문에)
+edit->project setting->axes (axes의 값들은 -1에서 +1까지의 값을 가진다. = 왼쪽 -1, NULL 0, 오른쪽 +1)
+horizontal: 수평, 좌우방향키를 누르면 차가 오브젝트가 왼쪽, 오른쪽으로 움직일 수 있게 해 줌 (ad)
+vertical: 수직, " 위, 아래로. (ws)
+* horizontal과 vertical탭이 2개가 있는데, 아래에 있는 탭들은 조이스틱이나 게임패드를 사용할 때 상응하는 부분
+Input.GetAxis(“수평or수직”)으로 키 –1에서 +1값을 반환받는다.
+
+컴퓨터 성능에 따른 프레임 변동 일정화시키기
+Time.deltaTime -> 각 프레임이 실행되는 데 시간이 얼마나 소요되었는지를 알려줌
+프레임률 동립성: 초당 프레임 * 1초당 프레임에 소요된 시간
+프레임률 동립성이 적용된 이동거리 = 원하는 이동거리 * 초당 프레임(Update함수) * Time.deltaTime
+
+단축키
+qwer: 손,좌표,회전,스케일 등
+탭으로 칸 이동 가능
+
+컴포넌트(구성요소): 플러그인으로 이해하면 쉬움
+Colider: 충돌 영역 지정해주는 플러그인 (스프라이트를 이용하는 2D게임은 ~Colider2D를 이용해야 함.
+Triger: 접촉 영역 지정해줌. 접촉하면 메서드 실행됨
+RigidBody: 오브젝트를 물성이 있는 것으로 취급하게 함. (움직이는 개체는 거의 다 필요하다고 보면 됨.) 
+
+인스펙터창에서 체크표시를 해제하면 게임 플레이 했을 때 해당 컴포넌트가 실행되지 않음.
+
+보통 콘솔창으로 내가 원하는 방향으로 스크립트가 실행되는지 확인을 함.
+OnCollisionEnter2D(): 접촉하면 실행되는 메서드 (트리거)
+
+------------
+
+colider 컴포넌트를 추가한 객체의 인스펙터 창에서 isTriger을 체크하면 더이상 충돌하지 않게됨(트리거로 작동됨) -> OnCollisionEnter2D()도 작동하지 않음
+->Triger 객체에서 사용 가능한 메서드
+OnTrigerEnter2D(): 트리거 영역에 닿으면 실행됨
+★OnTrigerExit2D(): 트리거 영역에서 빠져나오면 실행됨
+
+트리거 사용 꿀팁: 트리거 객체 생성 후, 스프라이트 렌더러를 체크 해제하면 투명한 트리거 영역으로 쓸 수 있음.
+
+에셋 관련
+
+에셋 폴더를 유니티 파일탐색기 안에 드래그하면 자동으로 불러와짐.
+에셋의 크기를 조절하기: 스케일툴 선택(r) -> 여러개의 스프라이트를 조절할 때에는 적절하지 않음.
+-> 이미지를 크게 하고 싶으면 유니티 탐색기에서 스프라이트를 클릭하여 단위 당 픽셀을 작게 조정하면 됨. (Pixels Per Unit)
+inspector-> -> apply 꼭 누르기.
+(다음부터 스프라이트를 삽입하면 조정된 크기로 삽입됨.)
+
+1유니티 = sence창에서 보여지는 한 칸
+1유니티 단위당 100 픽셀이 기본값.
+
+------------------------
+콜라이더 크기 조정
+1. size에서 수치값으로 조정
+2. Edit Colider에서 아이콘 클릭 후 드래그하여 조정
+
+카메라의 inspector에서 Size를 통해 카메라가 비출 크기를 설정가능
+
+빈 에셋 생성: Hierarchy에서 우클릭 후 Create Empty 클릭
+
+항상 에셋 생성 후에는 transform 컴포넌트의 position값을 우클릭하여 리셋시켜주는것을 생활화 하자.
+
+★타일 배치 팁
+sence아래의 Local을 grobal로 바꾸고, 그 옆에 snapping mechanism을 클릭하면 물체들을 유니티 단위에 따라서 이동시킬 수 있음.
+
+-------------------------
+★한 객체를 기준으로 카메라를 움직이는 방법
+1. 스크립트를 짜서 카메라에 컴포넌트를 추가하는 방법
+레퍼런스(어떠한 객체가 가리키고 있는, 해당 스크립트가 적용되지 않은 객체)를 생성하여 스크립트에 transform.position
+
+1-1. 레퍼런스를 SerializeField로 추가하는 방법 (나 이 객체를 참조할거야.)
+GameObject타입 serialized firld를 추가하여 참조 [SerializeField] GameObject 변수명;
+
+*주의: 추가한 카메라의 위치값은 객체의 z값과 완전히 동일하기에, 배경밖에 보여지지 않는다. 따라서 추가 설정이 필요하다. (z축을 줄여야 함.)
+-> transform.position = 변수명.transform.position + new Vector3 (0,0,-10);
+
+*또한, Update에 추가한 카메라의 위치 값 변동은 언제 실행될 지 명시할 필요가 있다. (코드가 길어질 수록 순위가 뒤섞여 딜레이가 생길 수 있음)
+-> Update를 LateUpdate로 바꿔서 맨 마지막에 카메라가 업데이트 될 수 있도록 한다. (ex. void LateUpdate())
+
+-------------------------
+Tag 사용법
+인스펙터창에서 태그 선택 / ADD TAG 선택 후 +버튼을 눌러 태그 생성
+
+Collider을 참조로 하는 OnCollisionEnter2D / OnTriggerEnter2D는 충돌하는 객체의 종류를 구분할 수 없다는 한계가 있음.
+-> Tag를 이용하여 조건문을 걸어주어야 함.
+
+void OnTriggerEnter2D(Collider2D other) // other은 현재 this와 충돌되어있는 객체를 뜻한다.
+	if(other.tag == "Tag명")
+	{
+	     Debug.Log("Tag명을 주웠음");
+	}
+
+bool 변수 선언
+-> bool 변수명;
+* bool변수를 처음 선언하면 flase값을 가지게 된다.
+
+-------------------------
+객체를 비활성화시키는 방법
+1. 오브젝트 비활성화
+2. 스프라이트 랜더러 끄기
+3. 삭제시키기(destroy)
+
+3-1
+해당 오브젝트를 sence에서 삭제시키는 방법
+-> Destroy(오브젝트명.gameObject, 삭제까지의 딜레이값(floatr값)) // gameObeject가 될 수도 있고, Sence가 될 수도 있음.
+* 참고: 딜레이값을 0으로 두면 즉시 삭제
+
+객체의 컴포넌트에 접근하기(SpriteRenderer에 접근하기) : 색 바꾸기 예제
+예를들어서 other객체의 스프라이트 렌더러 값을 바꾸고자 한다면
+-> SptireRenderer 변수명 = other.GetComponent<SpriteRenderer>();
+
+유니티에서는 Vector값, Color값등 컴포넌트의 특정 값에 접근하여 수정하고자 한다면, 새로운 컴포넌트의 특정 값을 선언하여 수정해야 한다.
+예를들어, Color32 NoPackageColor = new Color32(1,1,1,1); // 4번째 인수값은 투명도(Alpha값. 0은 투명)
+혹은 SpriteRenderer spriteRenderer = GetComponenet<SpriteRenderer>();
+
+-------------------------
+에셋 확장자->유니티 켜서 유니티 파일탐색기에 드래그 후 import
+
+Sprite Shapes-> 유니티 내에서 간단하게 스프라이트를 만들 때 주로 사용 (주로 지형지물)
+Closed Sprite Shape: 둘러쌓인 벽 안쪽으로 내용을 채워넣을 때 사용 (꽉 채워진 지형을 표현하는 느낌)
+Open Sprite Shape: 완벽하게 둘러쌓이지 못한 벽에 내용을 채워넣을 때 사용 (선으로만 지형을 표현하는 느낌)
+
+Sprite Shape Profile: Sprite Shapes의 Sptire Shape Controller컴포넌트 Profile(기본설정)에 사용되는 구성요소. 임의로 제작가능 (Create 항목)
+1. Angle Ranges-> 캐릭터가 움직일 때의 방향
+2. Corners-> 스프라이트의 각 모서리 모양 +)모서리 타일을 더 두껍게 하고 싶을 때-> Edit Spline클릭 후 모든 점들 포함되도록 드래그-> Height에서 조절
+3. Fill->스프라이트의 내부 모양 및 색상
+
+Sptire Shape Controller컴포넌트
+Edit Spline: 스프라이트의 모양 조절 (클릭으로 점 추가 / Delete로 점 삭제), Collider컴포넌트 추가 시에도 충돌범위가 자동으로 조절됨.
++) Collider 범위가 넓어 상호작용하는 객제와 간격이 너무 멀 때 조절 방법: Sprite Shape컴포넌트->Collider->Offset 
+
+Dynamic Sprite-> Circle Collider2D와 RigidBody2D가 기본 내장되어있는 객체
+
+객체를 더블클릭하면 해당 객체로 바로 줌인된다.
+
+유니티 파일 탐색기에서 스프라이트 클릭->Sprite Editor클릭->해당 스프라이트에서 원하는 만큼의 스프라이트의 범위를 조절하여 사용 가능
+
++) 채워넣을 스프라이트를 사용하였을 때 다 채워지지 않는 문제 해결 방법
+->스프라이트 클릭->Wrap Mode-> Clamp에서 Repeat로 변경
+
+-------------------------
+유니티 기본 패키지 임포트 방법: Window->package Manager
+package Manager탭에서 윗부분을 보면 드롭다운이 몇 개 있음. Unity Registry로 바꿔줘야함.
+Inproject: 프로젝트에 이미 들어간 패키지들
+Unity Registry: 유니티에서 제공되는 패키지들
+이후 원하는 패키지 검색 후 Install 하면 끝.
+
+한 객체를 기준으로 카메라를 움직이는 방법2
+2. 시네머신을 사용해서 팔로우 카메라를 생성하는 방법
+시네머신?-> 여러 대의 카메라를 동작할 수 있게 해주는 패키지. 여러 카메라에 적용되는 규칙을 쉽게 만들 수 있다.
+시네머신 패키지가 메인카메라가 어떻게 행동할것인지에 대한 로직을 정의해줌
+ex)줌인용 카메라, 다른 캐릭터를 비출 때 쓰는 카메라, 메인 캐릭터가 뛸때, 걸을때를 비춰주는 카메라 etc..
+
+2-1. 게임 플레이 팔로우 카메라
+컴포넌트->Cinemachine 또는 Hierachy영역에서 우클릭 후 Cinemachine -> Virtual Camera
+MainCamera에서 CinemachineBrain 컴포넌트가 추가된걸 알 수 있음.
+
+Virtual Camera객체->인스펙터에서 CinemachineVirtualCamera-> Body를 FramingTranspose로 바꾸기
+FramingTranspose: 게임 내 특정 대상을 프레이밍하여 가상 카메라의 바디를 이동
+follow에서 카메라가 잡아주기를 바라는 객체를 선택
+
++)객체를 중심으로 카메라의 위치를 변경하는 방법(캐릭터의 앞부분이 카메라에 보여지고 싶다는 등)	
+Body->ScreenX,Y조정
+
++)부모 객체에 자식 객체를 추가할 때, 자식 객체의 제자리 값은 0,0,0이다.
+
+피봇 포인트 수정하기(위치나 스케일값을 변경할 때의 중앙 점)
+자식객체를 모두 선택 후 부모 객체의 피봇포인트를 보며 수정한다.
+
+-------------------------
+surface effecter 2D: '충돌 영역 표면'을 따라 힘을 적용한다 (물건을 자동으로 옮겨주는 컨베이어 벨트 생각하면 됨.)
+surface effecter 말고도 다양한 effecter이 많으니까 나중에 사용해보기.
+-> 원하는 Sprite Shapes 클릭 -> surface effecter 2D 컴포넌트 추가하기 -> 원하는 Collider 2D에서 Used By Effector 체크하기
+
+surface effecter 2D의 Force에서 각각이 뜻하는 바
+speed: 말 그대로 컨베이어 벨트의 속도 / Speed Variation / Force: 옮기려는 물건이 얼마나 중력에 저항할 지
+
++) 지속적으로 충돌 영역 감지를 적용해야 할 필요가 있는 오브젝트 (ex. 계속 이동하며 다른 콜라이더와 마주치는 플레이어)는
+RigidBody->Collision Detection에서 Discrete(불연속)를 Continuous(연속)으로 변경
+
+
+-------------------------
+게임에서 Transform.Toration을 이용하여 Z축 값으로 오브젝트를 회전시키면 어설퍼짐 (어케될진 모름)
+-> Rigidbody에 torque(회전력)를 추가해서 회전시킬 수 있음
+1. Rigidbody2D 객체 형식의 변수 생성 (ex: Rigidbody2D rb2d;)
+2. Start()에서 해당 오브젝트의 Rigidbody2D 정보 받기 rb2d = GetComponent<Rigidbody2D>();
+3. Update에서 특정 키를 누르면 ( if(Input.GetKey(KeyCode.특정키) ) torque를 추가 ( rb2d.AddTorque(torqueAmount); )
+
+Rigidbody2D 컴포넌트의 변수 설명
+Mass(질량)
+Linear Drag(앞으로 가거나 뒤로 갈 때 얼마나 마찰을 줄 것인가): 물레방아의 표면의 마찰력, Linear Drag에 더 큰 숫자를 넣으면 이펙터(컨베이어 벨트)의 Speed값도 더 높은 속도를 부여해야 함
+Angular Drag(회전을 할 때 얼마나 마찰을 줄 것인가): 물레방아를 돌리데에 들어가는는 힘
+Grabiry Scale(중력)
+
+제어하는 오브젝트에 로직 부여 <-> 제어받는 오브젝트에 로직 부여
+: 취향, 강의자는 제어하는 오브젝트에 로직 부여 추천
+
+-------------------------
+Name Space: 라이브러리 > Class: 틀 > methods: 함수, values: 변수 > Statements
+
+씬 새로 저장
+File->Save As...
+
+빌드 인덱스에 새로운 씬 추가 (씬을 생성 후 여기서 무조건 추가해줘야함. 안그러면 ScenesManager에서 접근하지 못함.)
+File->Build Setting->Add Open Scenes(열려있는 Scenes을 추가)
+
+ctrl+. -> 추가 옵션
+->라이브러리를 추가하지 않고 메소드를 추가했을 때 추가옵션 추가를 통해 라이브러리 임포트 가능
+
+게임 일시정지(time.sleep 비슷한거) 방법
+-Invoke("메서드 이름", 딜레이 시간)
+: Invoke 함수는 딜레이 후 실행될 메소드를 알려줘서 통과(pass-in)할 수 있게 해 줘야함.
+
+-Coroutines
+
+파티클효과
+Create->Effects->Particle System
+
+입자시스템은 분출기와 입자로 이루어짐.
+분출기(Emitter)-> 위치적인 정보를 가지는 대상, 분출이되는 행위를 입자에게 부여
+입자(particles)-> 게임 오브젝트에 부여된 컴포넌트 (파티클 시스템 객체를 추가하지 않고 다른 객체에 추가 할 수도 있음. 비추)
+
+particle System 컴포넌트 -> Emission -> Rate over Time으로 분출량 설정 가능
+particle System 컴포넌트 -> Shape -> Shape으로 분출되는 패턴 설정 가능
+particle System 컴포넌트 -> Duration에서 얼마나 오래 분출 효과를 켜둘 건지 설정
+particle System 컴포넌트 -> Looping으로 분출 효과 무한으로 켜두기 가능
+particle System 컴포넌트 -> Start Lifetime분출된 입자가 얼마나 오래 남아있을지 결정 (각 입자마다 변수를 두고 싶다면 Start Lifetime 옆 드롭다운->Random Between Two Constants)
+particle System 컴포넌트 -> Start Speed로 뿜어져 나오는 속도 조절 가능(이것도 마찬가지로 각 입자마다 변수 설정 가능)
+particle System 컴포넌트 -> Renderer -> Material에서 입자 모양 변경 가능
+particle System 컴포넌트 -> Renderer -> Order in Layer에서 레이어 설정 가능
+particle System 컴포넌트 -> Start Color로 입자 색깔 변경 가능
+particle System 컴포넌트 -> Noise -> Stregth로 입자가 흔들리며 분출되도록 설정 가능
+particle System 컴포넌트 -> StartSize에서 입자 크기 설정 가능
+particle System 컴포넌트 -> Renderer -> Material
+particle System 컴포넌트 -> Play On Awake에서 트리거 되야 분출기가 실행되도록 설정 가능 (체크 해제하면 됨)
+particle System 컴포넌트 -> Simulation Space -> Local: 파티클이 부모 객체를 따라감 World: 파티클이 트리거된 위치에서 머뭄
+
+particle system 또한 게임오브젝트(카메라 등)과 마찬가지로 레퍼런스로 따서 코드로 작성해야 함.
+파티클_변수.play(): 입자 효과 실행
+
+스프라이트 배치 팁
+- 동일한 스프라이트를 여러개 배치해야 할 때, x축을 *-1해주면 수평반전이 되서 좀 더 변화를 줄 수 있다.
+
+항상 움직이는 게임 오브젝트의 프레임을 높이는 방법(필수)
+게임 오브젝트->Rigidbody2D->Interpolate에서 Interpolate선택
+
+GetComponent 메서드로 Rigidbody뿐만아니라 다른 다양한 컴포넌트의 정보들에 접근할 수 있다.
+그러나, GetComponent 매서드는 해당 스크립트가 적용된 오브젝트의 정보만 접근할 수 있다. 다른 오브젝트의 정보에 접근할 수 없을까.
+->FindObjectOfType<컴포넌트이름>()를 쓰면 된다. (해당 매서드는 적용받는 대상이 여러 개가 있으면 작동하지 않는다.)
+
+ex)Surface Effecter 2D에 접근해서 스피드값을 변경하려고 함
+->변수 = FindAnyObjectByType<SurfaceEffector2D>();
+변수.speed = float값;
+
