@@ -321,6 +321,94 @@ protect
 private
 : 본인 클래스에서만 접근 가능
 
+-------------------------
+Canvas-> UI요소등을 담고 있는 스크린 공간에 위치한 레이어
+Canvas에서 UI를 생성하려면 항상 Canvas의 자식 객체로 생성해야 한다.
+
+씬뷰는 월드 공간을 보고 있기때문에 스크린 공간은 따로 봐야한다. (캔버스 더블 클릭)
+->캔버스가 엄청 커 보이더라도, 실제 게임뷰에서는 스크린 공간만큼의 크기로 보여진다.
+
+
+캔버스의 이미지 조정
+캔버스의 자식객체로 이미지를 넣고, Source Image로 이미지를 삽입할 수 있다.
+Rect Transform
+-> 인스펙터에서 위치값과 크기 조절 가능
+-> 인스펙터 오른쪽에 Stretch-Stretch 그림을 클릭하면 이미지의 피벗과 포지션을 프리셋에서 선택할 수 있다.
+shift(피벗)와 alt(포지션)를 통해 단축키로 설정 가능하다.
+
+캔버스의 레이어값
+캔버스는 스크린공간에서도 레이어값을 조정 가능하다.
+Canvas->Sort Order
+
+<!!유니티에서 텍스트 구역 만드는법!!>
+0. Unity->Window->TextMeshPro->Import TMPI Essential Resources->전체 Import
+1. 원하는 Canvas의 자식으로 UI->Text-TextMeshPro를 생성한다.
+2. 'Color Gradient'를 선택하면 추가적인 색 옵션들을 선택 가능
+3. TextMeshPro의 인스펙터에를 쭉 내리면 Underlay(그림자)나 Glow(형광)등 다양한 설정을 선택 가능하다.
+
+<!!유니티에서 버튼 만드는법!!>
+0. (추천)EmptyObject를 생성하여 상황에 맞는 Layout Group 컴포넌트를 추가하여 자식으로 버튼 생성할 예정
+1. UI->ButtonMeshPro
+2. ButtonMeshPro의 인스펙터에서 Button컴포넌트를 통해 Interactable(활성화/비활성화), 상호작용시의 버튼 색 설정 가능, OnClick으로 실행 컴포넌트 설정
+-> OnClick에서 원하는 메서드가 담긴 스크립트를 넣어주고, 실행시킬 메서드와 메서드에 사용되는 매개변수등을 넣어주면 된다.
+3. Layout Groupd에서 버튼의 여백(pedding), 버튼간의 거리(Spacing), 정렬(Aligment), 크기 설정(Control Child Size) 설정 가능
+
+인스펙터의 [SerializeField]의 입력 필드 사이즈 늘리는법
+-> 직렬화 시킨 변수 앞에  [TextArea(최소 줄, 최대 줄)]도 선언해주기
+
+스크립터블 오브젝트
+-> 게임 오브젝트에 부착될 필요가 없는 스크립트 (일반적인 코드에서 다른 코드 임포트 해오는거 생각하면 됨.)
+변수나 메서드를 작성해놓고 다른 스크립트에서 가져다 쓰는 방식
+[CreateAssetMenu(menuName = "메뉴에서 보일 이름", fileName = "해당 스크립트로 생성될 스크립터블오브젝트 이름")]
+를 통해 탐색기에서 Creat를 할 때 해당 형식의 스크립트를 바로 생성할 수 있도록 설정 가능
+
+Getter 메서드
+-> 자바때 지섭이형이 설명해준 그거.
+ 프라이빗 클래스 내에서 특정 변수를 반환하는 함수를 퍼블릭으로 선언하여 다른 클래스에서 특정 변수를 읽을 수 있게 해주는 메서드
+
+TextMeshPro를 스크립트에서 관리하려면
+-> using TMPro;
+
+객체를 생성할 때 TextMeshPro와 TextMeshProUGUI의 차이점
+TextMeshPro는 게임안에서 실제로 존재하는 텍스트이고, TextMeshProUGUI는 UI에서 존재하는 텍스트이다.
+
+인스펙터창에서 우측 상단위에 자물쇠 버튼을 누르면 해당 오브젝트의 인스펙터창을 고정시킬 수 있다.
+
+*자식오브젝트의 컴포넌트 접근하기
+부모변수명.GetComponentInChildren<가지고 올 컴포넌트>();
+
+Image 컴포넌트는 using UnityEngine.UI를 해야 접근 가능하다.
+
+<!!유니티에서 타이머 설정하기!!>
+0. (선택)Canvas->Ui->Image에서 타이머에 사용되는 이미지 설정하기
+1. Image->ImageType에서 Filled 선택 후 FillMethods(채워지는 형식), FillOrign(채워지는 방향), ClockWise(시계방향/반대방향) 등을 선택
+2. 스크립트에서 타이머에 적용시킬 시간변수 -= Time.deltaTime 해주면 매 프레임마다 시간변수가 줄어든다.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
