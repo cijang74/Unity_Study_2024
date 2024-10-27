@@ -58,6 +58,7 @@ Input.GetAxis(“수평or수직”)으로 키 –1에서 +1값을 반환받는�
 Time.deltaTime -> 각 프레임이 실행되는 데 시간이 얼마나 소요되었는지를 알려줌
 프레임률 동립성: 초당 프레임 * 1초당 프레임에 소요된 시간
 프레임률 동립성이 적용된 이동거리 = 원하는 이동거리 * 초당 프레임(Update함수) * Time.deltaTime
+ex) float move_speed = Input.GetAixs("Horizontal") * speed * Time.deltaTime
 
 단축키
 qwer: 손,좌표,회전,스케일 등
@@ -389,7 +390,7 @@ Image 컴포넌트는 using UnityEngine.UI를 해야 접근 가능하다.
 
 
 
-
+asdf
 
 
 
