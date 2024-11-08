@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class EnemyAI : MonoBehaviour
 {
+    [SerializeField] private float roamChangeDirFloat = 2f;
+
     private enum State // 열거자 객체 정의
     {
         Roming
@@ -38,7 +40,7 @@ public class EnemyAI : MonoBehaviour
         {
             Vector2 roamPosition = GetRomingPosition();
             enemyPathfinding.Moveto(roamPosition); //Pathfinding 클래스의 Moveto함수에 방향벡터 전달
-            yield return new WaitForSeconds(2f); 
+            yield return new WaitForSeconds(roamChangeDirFloat); 
             // 2초동안 대기했다가 리턴함
         }
     }

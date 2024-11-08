@@ -7,9 +7,11 @@ public class EnemyPathfinding : MonoBehaviour
     [SerializeField] private float moveSpeed = 2f;
     private Rigidbody2D rb;
     private Vector2 moveDir;
+    private Knockback knockback;
 
     private void Awake() 
     {
+        knockback = GetComponent<Knockback>();
         rb = GetComponent<Rigidbody2D>();
     }
 
@@ -20,6 +22,11 @@ public class EnemyPathfinding : MonoBehaviour
 
     private void FixedUpdate() // 물리나 플레이어 입력에 주로 사용되는 고정 업데이트
     {
+        if(knockback.GettingKnockedBack) // 지금 넉벡중이면 고정 업데이트 하지 말고 꺼져
+        {
+            return;
+        }
+
         rb.MovePosition(rb.position + moveDir * (moveSpeed * Time.fixedDeltaTime)); 
         // 움직이려는 객체의 최근 포지션 + (이동벡터값 * (이동속도 * 프레임))
     }
