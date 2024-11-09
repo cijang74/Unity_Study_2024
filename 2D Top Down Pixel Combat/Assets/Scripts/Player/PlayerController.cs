@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : Singleton<PlayerController>
 {
     [SerializeField] private float moveSpeed = 1f;
     [SerializeField] private float dashSpeed = 4f;
@@ -14,8 +14,6 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D rb;
     private Animator myAnimator;
     private SpriteRenderer mySpriteRenderer;
-    public static PlayerController Instance;
-    // 다른 클래스에서 플레이어 컨트롤러에 접근하기 쉽도록 인스턴스화
     private float startingMoveSpeed; // 대쉬속도에서 원래 속도로 돌아가기 위한 변수
 
     private bool isDashing = false;
@@ -32,9 +30,11 @@ public class PlayerController : MonoBehaviour
     //     facingLeft = value;
     // }
 
-    void Awake() // 초기화, 해당 스크립트가 적용된 컴포넌트 정보 불러오기
+    protected override void Awake() // 싱글톤 클래스의 Awake()함수 재정의
     {
-        Instance = this;
+        base.Awake(); // 부모 클래스(싱클톤 클래스)의 Awake()함수 실행
+        // 실행하면 PlayerController 클래스의 인스턴스를 생성함
+
         playerControls = new PlayerControls();
         rb = GetComponent<Rigidbody2D>();
         myAnimator = GetComponent<Animator>();
