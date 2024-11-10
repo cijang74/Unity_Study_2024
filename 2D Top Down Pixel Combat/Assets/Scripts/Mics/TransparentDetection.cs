@@ -42,12 +42,12 @@ public class TransparentDetection : MonoBehaviour
         if(other.gameObject.GetComponent<PlayerController>())
         // 만약 충돌한놈이 PlayerController 컴포넌트를 가진놈이면
         {
-            if(spriteRenderer) // 만약 스프라이트렌더러가 존재하면
+            if(spriteRenderer) // 만약 스프라이트렌더러가 존재하면 -> 나무같은거
             {
                 StartCoroutine(FadeRoutine(spriteRenderer, fadeTime, spriteRenderer.color.a, 1f));        
             }
 
-            else if (tilemap)
+            else if (tilemap) // 만약 스프라이트렌더러가 존재하면 -> 캐노피같은거 (오류 참고)
             {
                 StartCoroutine(FadeRoutine(tilemap, fadeTime, tilemap.color.a, 1f));
             }      

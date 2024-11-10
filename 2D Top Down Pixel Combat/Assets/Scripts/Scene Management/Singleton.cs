@@ -25,6 +25,9 @@ public class Singleton<T> : MonoBehaviour where T : Singleton<T>
             instance = (T)this;
         }
 
-        DontDestroyOnLoad(gameObject); // 새로운 씬 로드할 때 해당 인스턴스 삭제하지 마시오
+        if(!gameObject.transform.parent) // 인스턴스의 부모 트랜스폼이 없는경우 (자신이 부모일경우)
+        {
+            DontDestroyOnLoad(gameObject); // 새로운 씬 로드할 때 해당 인스턴스 삭제하지 마시오
+        }
     }
 }

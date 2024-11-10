@@ -19,8 +19,14 @@ public class AreaEnterance : MonoBehaviour
         // sceneTransitionName(=sceneTransitionName)
         // 내가 이용할 입구가 다음씬에서 마지막으로 사용된 출구라면
         {
+            UIFade.Instance.FadeToClear();
+            // 화면 검은색으로 페이드아웃 시키기
+
             PlayerController.Instance.transform.position = transform.position;
             // 플레이어의 위치는 AreaEnterance가 적용된 객체의 위치와 같다.
+
+            CameraController.Instance.SetPlayerCameraFollow();
+            // 인스턴스화 한 카메라가 플레이어를 따라가도록 만드는 함수
         }
     }
 
