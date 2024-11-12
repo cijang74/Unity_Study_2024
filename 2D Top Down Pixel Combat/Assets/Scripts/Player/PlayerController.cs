@@ -8,6 +8,7 @@ public class PlayerController : Singleton<PlayerController>
     [SerializeField] private float moveSpeed = 1f;
     [SerializeField] private float dashSpeed = 4f;
     [SerializeField] private TrailRenderer myTrailRenderer;
+    [SerializeField] private Transform weaponCollider;
 
     private PlayerControls playerControls;
     private Vector2 movement;
@@ -58,6 +59,11 @@ public class PlayerController : Singleton<PlayerController>
     {
         AdjustPlayerFacingDirection(); // 마우스 포인터 위치에 따라 플레이어 방향 전환
         Move(); // 플레이어의 위치 변경
+    }
+
+    public Transform GetWeaponCollider()
+    {
+        return weaponCollider;
     }
 
     private void PlayerInput() // 애니컨트롤러에서 사용할 플레이어의 위치값 불러오기
