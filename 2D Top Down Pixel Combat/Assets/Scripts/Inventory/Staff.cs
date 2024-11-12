@@ -5,6 +5,16 @@ using UnityEngine;
 public class Staff : MonoBehaviour, IWeapon
 {
     [SerializeField] private WeaponInfo weaponInfo;
+    [SerializeField] private GameObject magicLaser;
+    [SerializeField] private Transform magicLaserSpawnPoint;
+
+    private Animator myAnimator;
+    readonly int Attack_HASH = Animator.StringToHash("Attack");
+
+    private void Awake() 
+    {
+        myAnimator = GetComponent<Animator>();
+    }
 
     public WeaponInfo GetWeaponInfo()
     {
@@ -13,7 +23,15 @@ public class Staff : MonoBehaviour, IWeapon
 
     public void Attack()
     {
-        Debug.Log("Staff Attack");
+        myAnimator.SetTrigger(Attack_HASH);
+    }
+
+    public void SpawnStaffProjectileAnimEvent()
+    {
+        // 애니메이션에서 실행시킬 함수
+
+        GameObject newLazer = Instantiate(magicLaser, magicLaserSpawnPoint.position, Quaternion.identity);
+        // 레이저의 인스턴스화
     }
 
     private void MouseFollowWithOffset() // 마우스 포인터 위치에 따라 무기 방향 전환
