@@ -61,7 +61,16 @@ public class ActiveInventory : MonoBehaviour
             Destroy(ActiveWeapon.Instance.CurrentActiveWeapon.gameObject);
         }
 
-        if(!transform.GetChild(activeSlotIndexNum).GetComponent<InventorySlot>())
+        // GameObject weaponToSpawn = transform.GetChild(activeSlotIndexNum).GetComponent<InventorySlot>().GetWeaponInfo().weaponPrefab; 
+        // 해당 스크립트가 적용된 오브젝트의 activeSlotIndexNum번째 자식오브젝트 -> InventorySlot n
+        // InventorySlot의 GetWeaponInfo()함수 실행 -> WeaponInfo리턴 -> Weaponprefab 접근
+
+        // 위 주석 내용을 짧게 줄인 코드가 아래 코드
+        Transform childTransform = transform.GetChild(activeSlotIndexNum);
+        InventorySlot inventorySlot = childTransform.GetComponentInChildren<InventorySlot>();
+        WeaponInfo weaponInfo = inventorySlot.GetWeaponInfo();
+
+        if(weaponInfo == null)
         // 만약 인벤토리 안에 담겨있는 무기가 존재하지 않는다면
         {
             ActiveWeapon.Instance.WeaponNull(); // CurrentActiveWeapon를 null로 만들어줌
@@ -69,9 +78,7 @@ public class ActiveInventory : MonoBehaviour
             // 아래 라인들 실행되지 않도록 리턴해버림
         }
 
-        GameObject weaponToSpawn = transform.GetChild(activeSlotIndexNum).GetComponent<InventorySlot>().GetWeaponInfo().weaponPrefab; 
-        // 해당 스크립트가 적용된 오브젝트의 activeSlotIndexNum번째 자식오브젝트 -> InventorySlot n
-        // InventorySlot의 GetWeaponInfo()함수 실행 -> WeaponInfo리턴 -> Weaponprefab 접근
+        GameObject weaponToSpawn = weaponInfo.weaponPrefab; // <- 강의랑 다르게 내가 조정한 부분
 
         GameObject newWeapon = Instantiate(weaponToSpawn, ActiveWeapon.Instance.transform.position, Quaternion.identity);
         // ActiveWeapon오브젝트의 위치로 weaponToSpawn프리펩을 인스턴스화

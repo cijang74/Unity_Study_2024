@@ -12,7 +12,7 @@ public class MouseFllow : MonoBehaviour
         // 게임 내 화면 마우스 위치로 변환
         
         Vector2 direction = transform.position - mousePosition;
-        // 내가 마우스 위치 - 캐릭터의 위치 => 마우스와 캐릭터에 대한 방향벡터
+        // 내 마우스 위치 - 캐릭터의 위치 => 마우스와 캐릭터에 대한 방향벡터
 
         transform.right = -direction;
     }

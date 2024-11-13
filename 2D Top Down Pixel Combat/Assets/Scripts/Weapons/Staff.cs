@@ -32,6 +32,7 @@ public class Staff : MonoBehaviour, IWeapon
 
         GameObject newLazer = Instantiate(magicLaser, magicLaserSpawnPoint.position, Quaternion.identity);
         // 레이저의 인스턴스화
+        newLazer.GetComponent<MagicLaser>().UpdateLaserRange(weaponInfo.weaponRange);
     }
 
     private void MouseFollowWithOffset() // 마우스 포인터 위치에 따라 무기 방향 전환

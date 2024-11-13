@@ -86,7 +86,8 @@ public class ActiveWeapon : Singleton<ActiveWeapon>
 
     private void Attack()
     {
-        if(attackButtonDown && !isAttacking)
+        if(attackButtonDown && !isAttacking && CurrentActiveWeapon)
+        // 쿨다운상태거나 지금 무기를 들고있지 않으면 실행안됨
         {
             AttackCoolDown();
             (CurrentActiveWeapon as IWeapon).Attack();
