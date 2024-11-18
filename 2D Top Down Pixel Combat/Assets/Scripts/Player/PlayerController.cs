@@ -10,6 +10,7 @@ public class PlayerController : Singleton<PlayerController>
     [SerializeField] private TrailRenderer myTrailRenderer;
     [SerializeField] private Transform weaponCollider;
 
+    private Knockback knockback;
     private PlayerControls playerControls;
     private Vector2 movement;
     private Rigidbody2D rb;
@@ -40,6 +41,7 @@ public class PlayerController : Singleton<PlayerController>
         rb = GetComponent<Rigidbody2D>();
         myAnimator = GetComponent<Animator>();
         mySpriteRenderer = GetComponent<SpriteRenderer>();
+        knockback =  GetComponent<Knockback>();
     }
 
     private void Start()
@@ -100,6 +102,11 @@ public class PlayerController : Singleton<PlayerController>
 
     private void Move() // 플레이어의 위치 변경
     {
+        if(knockback.GettingKnockedBack)
+        {
+            // 넉벡중이면 이동 씹히게 할것. 안씹히게 해 놓으면 밑 코드가 넉벡을 씹음.
+            return;
+        }
         rb.MovePosition(rb.position + movement * (moveSpeed * Time.fixedDeltaTime)); 
         // 움직이려는 객체의 최근 포지션 + (이동벡터값 * (이동속도 * 프레임))
     }

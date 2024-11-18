@@ -13,6 +13,10 @@ public class RandomIdleAnimation : MonoBehaviour
 
     private void Start() 
     {
+        if(!myAnimator)
+        {
+            return;
+        }
         // AnimatorStateInfo는 애니메이션의 현재 상태 정보를 담고있는 클래스
         // 애니메이터의 첫번째 애니메이션 스프라이트 -> 0
         // 즉, 시작 애니메이션 키프레임을 저장하는 느낌

@@ -43,4 +43,10 @@ public class EnemyPathfinding : MonoBehaviour
             spriteRenderer.flipX = false;
         }
     }
+
+    public void StopMoving()
+    {
+        moveDir = Vector3.zero;
+        // 방향벡터를 0으로 설정함
+    }
 }
