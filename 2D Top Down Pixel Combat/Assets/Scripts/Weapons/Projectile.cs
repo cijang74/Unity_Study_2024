@@ -29,6 +29,12 @@ public class Projectile : MonoBehaviour
         this.projectileRange = projectileRange;
     }
 
+    public void UpdateMoveSpeed(float moveSpeed)
+    {
+        // 해당 투사체의 사정거리를 설정하는 함수
+        this.moveSpeed = moveSpeed;
+    }
+
     private void OnTriggerEnter2D(Collider2D other) 
     {
         EnemyHealth enemyHealth = other.gameObject.GetComponent<EnemyHealth>();
