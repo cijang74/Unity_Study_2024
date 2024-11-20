@@ -12,6 +12,7 @@ public class Destructible : MonoBehaviour
         if(other.gameObject.GetComponent<DamageSource>() || other.gameObject.GetComponent<Projectile>())
         // 만약 닿은것이 검의 공격콜라이더거나 투사체라면
         {
+            GetComponent<PickUpSpawner>().DropItems();
             Instantiate(destroyVFX, transform.position, Quaternion.identity);
             // 삭제 애니메이션을 해당 스크립트가 적용된 오브젝트의 위치에 생성
             Destroy(gameObject);

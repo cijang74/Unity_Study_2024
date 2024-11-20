@@ -26,7 +26,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5747771421753463404
 Transform:
   m_ObjectHideFlags: 0
@@ -266,13 +266,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bulletPrefab: {fileID: 3334230235955173806, guid: 00290d6eca3feaf4f95fd03105455aaa, type: 3}
-  bulletMoveSpeed: 6
-  timeBetweenBrusts: 1.5
+  bulletMoveSpeed: 5
+  burstCount: 8
+  projectilesPerBurst: 8
+  angleSpread: 97
+  startDistance: 0.3
+  timeBetweenBrusts: 1
   restTime: 0.5
-  startDistance: 0.1
-  angleSpread: 44
-  burstCount: 5
-  projectilesPerBurst: 10
+  stagger: 1
+  oscillate: 1
 --- !u!1 &1913770970437511786
 GameObject:
   m_ObjectHideFlags: 0

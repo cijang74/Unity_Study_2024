@@ -39,12 +39,16 @@ public class PlayerHealth : MonoBehaviour
     }
 
     public void TakeDamage(int damageAmount, Transform hitTransform)
+    // 데미지양과 데미지를 입힌 오브젝트의 위치를 입력받음
     {
         if(!canTakeDamage == true)
         // 만약 무적시간이면 넉백과 데미지 받지않도록 아래 함수들 무시
         {
             return;
         }
+
+        // 카메라 흔들림
+        ScreenShakeManager.Instance.ShakeScreen();
 
         // 플레이어에게 넉백과 플래시
         knockback.GetKnockedBack(hitTransform, knockBackTrustAmount);
