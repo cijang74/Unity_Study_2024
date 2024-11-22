@@ -35070,6 +35070,14 @@ PrefabInstance:
       propertyPath: m_LocalPosition.x
       value: -0.97
       objectReference: {fileID: 0}
+    - target: {fileID: 7319077211030492902, guid: d6745e360fe0efb4195faf94f66eb536, type: 3}
+      propertyPath: sceneToLoad
+      value: Scene_2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7319077211030492902, guid: d6745e360fe0efb4195faf94f66eb536, type: 3}
+      propertyPath: sceneTransitionName
+      value: West_Enterance
+      objectReference: {fileID: 0}
     - target: {fileID: 7366643697794067654, guid: d6745e360fe0efb4195faf94f66eb536, type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -35081,6 +35089,10 @@ PrefabInstance:
     - target: {fileID: 7890406978210671049, guid: d6745e360fe0efb4195faf94f66eb536, type: 3}
       propertyPath: m_Name
       value: AreaExit
+      objectReference: {fileID: 0}
+    - target: {fileID: 9017267021907495668, guid: d6745e360fe0efb4195faf94f66eb536, type: 3}
+      propertyPath: transitionName
+      value: East_Enterance
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -36853,6 +36865,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: Cameras
       objectReference: {fileID: 0}
+    - target: {fileID: 2497631322371986557, guid: df1a35526ddf03d4b9279ef7e5653730, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 8.07
+      objectReference: {fileID: 0}
+    - target: {fileID: 2497631322371986557, guid: df1a35526ddf03d4b9279ef7e5653730, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 4532176125160227920, guid: df1a35526ddf03d4b9279ef7e5653730, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 7.3266273
+      objectReference: {fileID: 0}
+    - target: {fileID: 4532176125160227920, guid: df1a35526ddf03d4b9279ef7e5653730, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2.00842
+      objectReference: {fileID: 0}
     - target: {fileID: 6221187878383806243, guid: df1a35526ddf03d4b9279ef7e5653730, type: 3}
       propertyPath: m_ChildCameras.Array.size
       value: 0
@@ -36992,6 +37020,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2693633188929110160, guid: 0a5e9be37fa6d214e882f1309d54ea0d, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3436163944072898787, guid: 0a5e9be37fa6d214e882f1309d54ea0d, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3436163944072898787, guid: 0a5e9be37fa6d214e882f1309d54ea0d, type: 3}
+      propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

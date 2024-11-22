@@ -6,6 +6,15 @@ public class Pickups : MonoBehaviour
 {
     // 픽업아이템에 부착할 스크립트
     
+    // 열거자
+    private enum PickUpType
+    {
+        GoldCoin,
+        StaminaGlobe,
+        healthGlobe
+    }
+
+    [SerializeField] private PickUpType pickUpType;
     [SerializeField] private float pickUpDistance = 5f; // 자력 사거리
     [SerializeField] private float acclartionRate = 0.2f; // 자력 가속도
     [SerializeField] private float moveSpeed = 3f; // 자력 강도
@@ -31,6 +40,7 @@ public class Pickups : MonoBehaviour
         if(other.gameObject.GetComponent<PlayerController>())
         // 만약 닿은게 플레이어라면
         {
+            DetectPickUpType();
             Destroy(gameObject);
         }
     }
@@ -57,6 +67,25 @@ public class Pickups : MonoBehaviour
             transform.position = Vector2.Lerp(startPoint, endPoint, linearT) + new Vector2(0f, height);
             
             yield return null;
+        }
+    }
+
+    private void DetectPickUpType()
+    {
+        switch(pickUpType)
+        {
+            case PickUpType.GoldCoin:
+                // 1골드를 추가하고 UI를 업데이트하는 메서드
+                EconomyManager.Instance.UpdateCurrentGold();
+                break; 
+
+            case PickUpType.healthGlobe:
+                PlayerHealth.Instance.HealPlayer();
+                break; 
+
+            case PickUpType.StaminaGlobe:
+                Debug.Log("Get Stamina");
+                break; 
         }
     }
 

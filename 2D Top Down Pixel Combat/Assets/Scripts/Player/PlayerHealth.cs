@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class PlayerHealth : MonoBehaviour
+public class PlayerHealth : Singleton<PlayerHealth>
 {
     // 플레이어의 HP와 피격 관련 스크립트
 
@@ -10,14 +11,19 @@ public class PlayerHealth : MonoBehaviour
     [SerializeField] private float knockBackTrustAmount = 10f;
     [SerializeField] private float DamageRecoveryTime = 1f;
 
+    const string  HEALTH_SLIDER_TEXT= "Health Slider";
+
     private int currentHealth;
 
+    private Slider heathSlider;
     private Knockback knockback;
     private Flash flash;
     private bool canTakeDamage = true;
     
-    private void Awake() 
+    protected override void Awake() 
     {
+        base.Awake();
+
         flash = GetComponent<Flash>();
         knockback = GetComponent<Knockback>();
     }
@@ -25,6 +31,7 @@ public class PlayerHealth : MonoBehaviour
     private void Start() 
     {
         currentHealth = maxHealth;
+        UpdateHealthSlider();
     }
 
     private void OnCollisionStay2D(Collision2D other)
@@ -35,6 +42,17 @@ public class PlayerHealth : MonoBehaviour
         if(enemy)
         {
             TakeDamage(1, other.transform);
+        }
+    }
+
+    public void HealPlayer()
+    {
+        if(currentHealth < maxHealth)
+        {
+            currentHealth++;
+
+            // UI 업데이트
+            UpdateHealthSlider();
         }
     }
 
@@ -58,6 +76,12 @@ public class PlayerHealth : MonoBehaviour
         canTakeDamage = false;
         currentHealth -= damageAmount;
         StartCoroutine(DamageRecoveryRoutine());
+
+        // 플레이어 죽는피인지 체크
+        CheckIfPlayerDeath();
+
+        // UI 업데이트
+        UpdateHealthSlider();
     }
 
     private IEnumerator DamageRecoveryRoutine()
@@ -65,5 +89,26 @@ public class PlayerHealth : MonoBehaviour
         // 한프레임에 연속 피격받는것을 방지하기 위한 코루틴
         yield return new WaitForSeconds(DamageRecoveryTime);
         canTakeDamage = true;
+    }
+
+    private void UpdateHealthSlider()
+    // 체력 UI 연결하여 업데이트
+    {
+        if(heathSlider == null)
+        {
+            heathSlider = GameObject.Find(HEALTH_SLIDER_TEXT).GetComponent<Slider>();
+        }
+
+        heathSlider.maxValue = maxHealth;
+        heathSlider.value = currentHealth;
+    }
+
+    private void CheckIfPlayerDeath()
+    {
+        if(currentHealth <= 0)
+        {
+            currentHealth = 0; // UI 슬라이더가 음수방향으로 뚫리지 않게
+            Debug.Log("Player Death");
+        }
     }
 }
