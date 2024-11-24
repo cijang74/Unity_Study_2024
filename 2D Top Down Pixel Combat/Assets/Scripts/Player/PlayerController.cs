@@ -50,11 +50,17 @@ public class PlayerController : Singleton<PlayerController>
         // 즉, _(전달값 X)를 파라미터로하여 연산자 뒤 함수를 실행한 값을 덧붙여준다.
         playerControls.Combat.Dash.performed += _ => Dash();
         startingMoveSpeed = moveSpeed;
+        ActiveInventory.Instance.EquitStartingWeapon();
     }
 
-    private void OnEnable() // 플레이어 컨트롤을 활성화 할 때 사용
+    private void OnEnable() // 해당 조건을 만족해야 해당 스크립트 기능 사용 가능
     {
-        playerControls.Enable();
+        playerControls.Enable(); // playerControls이 존재하는지 확인 (플레이어가 존재하는지)
+    }
+
+    private void OnDisable()
+    {
+        playerControls.Disable();
     }
 
     private void FixedUpdate() // 물리나 플레이어 입력에 주로 사용되는 고정 업데이트
@@ -79,8 +85,9 @@ public class PlayerController : Singleton<PlayerController>
 
     private void Dash() // 대쉬함수
     {
-        if(isDashing == false)
+        if(isDashing == false && Stamina.Instance.CurrentStamina > 0)
         {
+            Stamina.Instance.UseStamina();
             isDashing = true;
             moveSpeed *= dashSpeed;
             myTrailRenderer.emitting = true; // Trail(대쉬 이펙트) 켜기
@@ -102,9 +109,9 @@ public class PlayerController : Singleton<PlayerController>
 
     private void Move() // 플레이어의 위치 변경
     {
-        if(knockback.GettingKnockedBack)
+        if(knockback.GettingKnockedBack || PlayerHealth.Instance.IsDead)
         {
-            // 넉벡중이면 이동 씹히게 할것. 안씹히게 해 놓으면 밑 코드가 넉벡을 씹음.
+            // 넉벡중, 죽었으면 이동 씹히게 할것. 안씹히게 해 놓으면 밑 코드가 넉벡을 씹음.
             return;
         }
         rb.MovePosition(rb.position + movement * (moveSpeed * Time.fixedDeltaTime)); 

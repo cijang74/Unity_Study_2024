@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0c969da26435b5449c97de7b7552216, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  transitionName: West_Enterance
+  transitionName: 
 --- !u!1 &7880820249932524447
 GameObject:
   m_ObjectHideFlags: 0
@@ -4967,5 +4967,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a57aba0455319d4f8331be456059cbc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneToLoad: Scene_1
-  sceneTransitionName: East_Enterance
+  sceneToLoad: 
+  sceneTransitionName: 

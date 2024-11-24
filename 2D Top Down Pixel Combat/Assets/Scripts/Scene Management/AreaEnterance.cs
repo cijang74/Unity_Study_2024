@@ -19,6 +19,8 @@ public class AreaEnterance : MonoBehaviour
         // sceneTransitionName(=sceneTransitionName)
         // 내가 이용할 입구가 다음씬에서 마지막으로 사용된 출구라면
         {
+            Debug.Log("Debug");
+
             UIFade.Instance.FadeToClear();
             // 화면 검은색으로 페이드아웃 시키기
 

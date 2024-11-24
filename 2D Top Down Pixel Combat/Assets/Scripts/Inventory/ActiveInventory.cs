@@ -2,14 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ActiveInventory : MonoBehaviour
+public class ActiveInventory : Singleton<ActiveInventory>
 // 인벤토리에서 무기 선택하면 하이라이트 표시를 활성화시키는 스크립트
 {
     private int activeSlotIndexNum = 0; // 셀렉트 인덱스
     private PlayerControls playerControls;
 
-    private void Awake() 
+    protected override void Awake() 
     {
+        base.Awake();
         playerControls = new PlayerControls();
     }
 
@@ -18,14 +19,17 @@ public class ActiveInventory : MonoBehaviour
         playerControls.Inventory.Keyboard.performed += ctx => ToggleActiveSlot((int)ctx.ReadValue<float>());
         // ctx는 내가 누른 값의 value를 읽기위해 접근가능한 변수
         // 예를 들어 1을 누르면 ctx에 누른키가 저장이되고, ReadValue를 통해 반환시킬 수 있다.
-
-        ToggleActiveHighlight(0); // 기본 선택된 무기는 인벤토리 슬롯의 0번째 무기
     }
 
     private void OnEnable() 
     {
         playerControls.Enable();
         // 플레이어가 존재하는지 확인
+    }
+
+    public void EquitStartingWeapon()
+    {
+        ToggleActiveHighlight(0); // 기본 선택된 무기는 인벤토리 슬롯의 0번째 무기
     }
 
     private void ToggleActiveSlot(int numValue)
@@ -55,6 +59,12 @@ public class ActiveInventory : MonoBehaviour
 
     private void ChangeActiveWeapon()
     {
+        if(PlayerHealth.Instance.IsDead)
+        {
+            // 죽었으면 인벤토리 변경 기능 비활성화되도록 바로 리턴
+            return;
+        }
+
         if(ActiveWeapon.Instance.CurrentActiveWeapon != null)
         // 현재 선택중인 무기를 삭제하는 제어문. 항상 가장 상단에 위치시켜놓아야함.
         {

@@ -84,8 +84,11 @@ public class Pickups : MonoBehaviour
                 break; 
 
             case PickUpType.StaminaGlobe:
-                Debug.Log("Get Stamina");
+                Stamina.Instance.RefreshStamina();
                 break; 
+
+            default:
+                break;
         }
     }
 
@@ -104,7 +107,7 @@ public class Pickups : MonoBehaviour
         {
         // 자력 사거리를 벗어나면 가해지던 힘 X
             moveDir = Vector3.zero;
-            moveSpeed = 0;
+            moveSpeed = 0f;
         }
     }
     
