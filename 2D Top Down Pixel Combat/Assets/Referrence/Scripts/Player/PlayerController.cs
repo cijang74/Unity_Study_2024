@@ -148,8 +148,11 @@ public class PlayerController : Singleton<PlayerController>
     // 점프를 누르면 1초만 재생
     private IEnumerator ResetJumpTriggerAfterDelay(float delay)
     {
+        while(!myCapusleCollider.IsTouchingLayers(LayerMask.GetMask("Ground")))
+        {
+            myAnimator.SetBool("isJump", false);
+        }
         yield return new WaitForSeconds(delay);
-        myAnimator.SetBool("isJump", false);
     }
 
     private void Move() // 플레이어의 위치 변경 (FixedUpdate에서 실행됨)
