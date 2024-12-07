@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 4835597205625392805}
   - component: {fileID: 6419341609968248432}
   - component: {fileID: 8861227052965316498}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Triffid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -187,7 +187,7 @@ MonoBehaviour:
   DieEvent:
     m_PersistentCalls:
       m_Calls: []
-  findDistance: 11.18
+  rayLength: 10
   moveSpeed: 1
   attackDistance: 1.1
   attackCooldown: 1.5
@@ -201,7 +201,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7869041895940357423}
   - component: {fileID: 3814089344206460170}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Hit
   m_TagString: Untagged
   m_Icon: {fileID: 0}

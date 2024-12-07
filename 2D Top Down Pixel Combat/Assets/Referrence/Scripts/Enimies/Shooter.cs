@@ -159,4 +159,14 @@ public class Shooter : MonoBehaviour, IEnemy
         Vector2 pos = new Vector2(x, y);
         return pos;
     }
+
+    public void Trace()
+    {
+        
+    }
+
+    public void Stop()
+    {
+        
+    }
 }

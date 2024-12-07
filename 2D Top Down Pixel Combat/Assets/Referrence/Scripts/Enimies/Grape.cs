@@ -39,4 +39,14 @@ public class Grape : MonoBehaviour, IEnemy
     {
         Instantiate(grapeProjectilePrefab, transform.position, Quaternion.identity); // 총알의 인스턴스화
     }
+
+    public void Trace()
+    {
+
+    }
+
+    public void Stop()
+    {
+        
+    }
 }

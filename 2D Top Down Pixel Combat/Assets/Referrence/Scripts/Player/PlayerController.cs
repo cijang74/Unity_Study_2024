@@ -19,11 +19,13 @@ public class PlayerController : Singleton<PlayerController>
     private Animator myAnimator;
     private SpriteRenderer mySpriteRenderer;
     private float startingMoveSpeed; // 대쉬속도에서 원래 속도로 돌아가기 위한 변수
-    private Vector2 setGravity;
 
     private bool isDashing = false;
+    
     private bool isJump = false;
+    private bool jumpStarted = false; // New flag to control jump animation trigger
     private bool canDoubleJump;
+
     private bool facingLeft = false;
     public bool FacingLeft { get {return facingLeft; } }
     // 위 생략방식은 아래 함수들과 같은 역할을 한다. 단, 참조 변수는 무조건 private이어야만 한다.
@@ -57,7 +59,7 @@ public class PlayerController : Singleton<PlayerController>
         // =>: 람다식, 연산자 왼쪽이 파라미터, 연산자 오른쪽이 실행문장
         // 즉, _(전달값 X)를 파라미터로하여 연산자 뒤 함수를 실행한 값을 덧붙여준다.
         playerControls.Combat.Dash.performed += _ => Dash();
-        playerControls.Movement.Jump.performed +=_=> OnJump();
+        playerControls.Movement.Jump.performed +=_=> Jump(); // 스페이스바 누르면 점프
 
         startingMoveSpeed = moveSpeed;
         ActiveInventory.Instance.EquitStartingWeapon();
@@ -77,6 +79,13 @@ public class PlayerController : Singleton<PlayerController>
     {
         AdjustPlayerFacingDirection(); // 마우스 포인터 위치에 따라 플레이어 방향 전환
         Move(); // 플레이어의 위치 변경
+
+        if(myCapusleCollider.IsTouchingLayers(LayerMask.GetMask("Ground"))) // 땅에 안닿아있으면 너 점프 하는중이잖아
+        {
+            isJump = false;
+            jumpStarted = false; // Reset flag for the next jump
+            myAnimator.SetBool("isJump", false);
+        }
     }
 
     public Transform GetWeaponCollider()
@@ -117,45 +126,33 @@ public class PlayerController : Singleton<PlayerController>
         isDashing = false;
     }
 
-    void OnJump() // 점프함수
+    void Jump() // 점프함수
     {  
-        if(isJump == false || canDoubleJump)
+        if(isJump == false || canDoubleJump) // 점프 조건
         {
-            //jump 애니메이션 추가
-            isJump = true;
-            myAnimator.SetBool("isJump", true);
-
-            if(myCapusleCollider.IsTouchingLayers(LayerMask.GetMask("Ground"))) // 1단점프
+            if(myCapusleCollider.IsTouchingLayers(LayerMask.GetMask("Ground"))) // 1단점프: 지금 땅에 닿아있으면 
             {
-                rb.velocity += new Vector2(0f, jumpSpeed);
+                rb.velocity = new Vector2(rb.velocity.x, jumpSpeed);
                 canDoubleJump = true;
-                Debug.Log("canDoubleJump: " + canDoubleJump); //디버깅
             }
 
-            else if(canDoubleJump) // 2단점프
+            else if(canDoubleJump) // 2단점프: 지금 땅에 안닿아있으면
             {
-                rb.velocity *= new Vector2(1f, 0f);
-                rb.velocity += new Vector2(0f, jumpSpeed);
+                rb.velocity = new Vector2(rb.velocity.x, jumpSpeed);
                 canDoubleJump = false;
             }
 
-            //jump 애니메이션 중지
-            StartCoroutine(ResetJumpTriggerAfterDelay(1.0f));
+            isJump = true;
+
+            if (!jumpStarted) // 한번만 애니메이션 트리거 실행
+            {
+                jumpStarted = true;
+                myAnimator.SetBool("isJump", true);
+            }
         }
-        isJump = false;
     }
 
-    // 점프를 누르면 1초만 재생
-    private IEnumerator ResetJumpTriggerAfterDelay(float delay)
-    {
-        while(!myCapusleCollider.IsTouchingLayers(LayerMask.GetMask("Ground")))
-        {
-            myAnimator.SetBool("isJump", false);
-        }
-        yield return new WaitForSeconds(delay);
-    }
-
-    private void Move() // 플레이어의 위치 변경 (FixedUpdate에서 실행됨)
+    private void Move() // 플레이어의 위치 변경 (FixedUpdate에서 반복되어서 실행됨)
     {
 
         if(knockback.GettingKnockedBack || PlayerHealth.Instance.IsDead)

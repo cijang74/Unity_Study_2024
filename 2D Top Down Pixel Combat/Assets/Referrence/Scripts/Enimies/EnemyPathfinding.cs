@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemyPathfinding : MonoBehaviour
 {
-    [SerializeField] private float moveSpeed = 2f;
+    [SerializeField] public float moveSpeed = 2f;
     private Rigidbody2D rb;
     private Vector2 moveDir;
     private Knockback knockback;
@@ -29,18 +29,21 @@ public class EnemyPathfinding : MonoBehaviour
             return;
         }
 
-        rb.MovePosition(rb.position + moveDir * (moveSpeed * Time.fixedDeltaTime)); 
-        // 움직이려는 객체의 최근 포지션 + (이동벡터값 * (이동속도 * 프레임))
+        Vector2 EnemyVelocity = new Vector2(moveDir.x * moveSpeed, rb.velocity.y);
+        rb.velocity = EnemyVelocity;
+
+        // rb.MovePosition(rb.position + moveDir * (moveSpeed * Time.fixedDeltaTime)); 
+        // // 움직이려는 객체의 최근 포지션 + (이동벡터값 * (이동속도 * 프레임))
 
         // 움직이는 방향에 따라 스프라이트 뒤집어주기
         if(moveDir.x < 0)
         {
-            spriteRenderer.flipX = true;
+            spriteRenderer.flipX = false;
         }
 
         else if(moveDir.x > 0)
         {
-            spriteRenderer.flipX = false;
+            spriteRenderer.flipX = true;
         }
     }
 

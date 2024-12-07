@@ -1,139 +1,136 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyAI : MonoBehaviour
 {
-    [SerializeField] private float roamChangeDirFloat = 2f;
-    [SerializeField] private float attackRange = 0f;
-    [SerializeField] private MonoBehaviour enemyType;
-    [SerializeField] private float attackCoolDown = 2f;
-    [SerializeField] private bool stopMovingWhileAttacking = false;
+    [SerializeField] private float rayLength = 10f; // 레이캐스트 길이
+    [SerializeField] private float traceRange = 5f; // 추적 범위
+    [SerializeField] private float attackDistance = 2f; // 공격 가능 거리
+    [SerializeField] private MonoBehaviour enemyType; // 적 동작 클래스 (IEnemy 인터페이스 구현 필요)
+    [SerializeField] private float attackCoolDown = 2f; // 공격 쿨타임
+    [SerializeField] private float attackDuration = 1f; // 공격 애니메이션 지속 시간
 
-    private bool canAttack = true;
+    private bool canAttack = true; // 공격 가능 여부
+    private bool isAttackInProgress = false; // 공격 진행 중 여부
 
-    private enum State // 열거자 객체 정의
+    private State state; // 몬스터 상태
+    private EnemyPathfinding enemyPathfinding; // 경로 탐색 관련 컴포넌트
+
+    private enum State 
     {
-        Roming,
-        Attaking
+        Stoping, // 정지 상태
+        Tracing, // 추적 상태
+        Attacking // 공격 상태
     }
 
-    // class State <- 위 함수와 같은 역할을 함.
-    // {
-	//      public static final State Roming = new State();
-	//      public static final State "" = new State();
-    // }
-
-    private State state;
-    private EnemyPathfinding enemyPathfinding;
-    private Vector2 roamPosition;
-    private float timeRoaming = 0f;
+    private Transform playerTransform; // 플레이어 Transform 정보
 
     private void Awake()
     {
-        enemyPathfinding = GetComponent<EnemyPathfinding>();
-        state = State.Roming; // 처음 state 상태는 Roming상태
+        enemyPathfinding = GetComponent<EnemyPathfinding>(); // EnemyPathfinding 컴포넌트 가져오기
+        state = State.Stoping; // 초기 상태 설정
+        playerTransform = GameObject.FindGameObjectWithTag("Player").transform; // 플레이어 Transform 설정
     }
 
-    // 코루틴은 시간의 경과에 따른 절차적 단계를 수행하는데에 사용되는 함수
-    // 1번째 호출 끝나고 다시 코루틴 호출하면 1번째 호출 리턴 라인 이후부터 시작.
-    // 마지막번째 호출이 끝나고 다시 코루틴 호출하면 마지번째의 전 호출 리턴 라인부터
-    private void Start()
-    {
-        roamPosition = GetRomingPosition();
-    }
-    
     private void Update()
     {
-        MovementStateControl();
-    }
-
-    private void MovementStateControl()
-    // 상태전환 제어
-    {
-        switch (state) // state에 따라 조건을 만족하는 코드를 실행
+        // 상태에 따라 동작 수행
+        switch (state)
         {
-            case State.Roming:
-                Roaming();
+            case State.Stoping:
+                Stoping();
                 break;
-            
-            case State.Attaking:
+            case State.Tracing:
+                Tracing();
+                break;
+            case State.Attacking:
                 Attacking();
                 break;
-            
-            default:
-                break;
-
         }
     }
 
-    private void Roaming()
+    private void Stoping()
     {
-        timeRoaming += Time.deltaTime;
-        enemyPathfinding.Moveto(roamPosition); //Pathfinding 클래스의 Moveto함수에 방향벡터 전달
+        // 정지 상태: 애니메이션 및 이동 멈춤
+        (enemyType as IEnemy)?.Stop();
+        enemyPathfinding.StopMoving();
 
-        if(Vector2.Distance(transform.position, PlayerController.Instance.transform.position) < attackRange)
-        // 플레이어가 몬스터 공격범위에 들어왔으면공격
+        // 플레이어가 추적 범위 안에 들어오면 추적 상태로 전환
+        if (IsPlayerInRaycast(traceRange))
         {
-            state = State.Attaking;
+            state = State.Tracing;
         }
+    }
 
-        if(timeRoaming > roamChangeDirFloat)
-        // 돌아다닌 시간이 방향전환타이머를 초과했으면 다른 방향으로 설정하게 함
+    private void Tracing()
+    {
+        // 추적 상태: 플레이어를 향해 이동
+        (enemyType as IEnemy)?.Trace();
+
+        // 플레이어가 공격 범위 안에 들어오면 공격 상태로 전환
+        if (IsPlayerInRaycast(attackDistance))
         {
-            roamPosition = GetRomingPosition();
+            state = State.Attacking;
+        }
+        // 플레이어가 추적 범위를 벗어나면 정지 상태로 전환
+        else if (!IsPlayerInRaycast(traceRange))
+        {
+            state = State.Stoping;
         }
     }
 
     private void Attacking()
     {
-        if(Vector2.Distance(transform.position, PlayerController.Instance.transform.position) > attackRange)
-        // 플레이어가 몬스터 공격범위에서 벗어났으면
+        // 공격 중일 때 다른 동작 수행하지 않음
+        if (isAttackInProgress) return;
+
+        // 플레이어가 공격 범위를 벗어나면 추적 상태로 전환
+        if (!IsPlayerInRaycast(attackDistance))
         {
-            state = State.Roming;
+            StartCoroutine(SwitchToTraceAfterAttack());
+            return;
         }
 
-        if(attackRange != 0 && canAttack == true)
-        // 원거리공격 가능한 적이라면 원거리공격하기
+        // 공격 수행
+        if (canAttack)
         {
-            canAttack = false;
-            (enemyType as IEnemy).Attack();
-
-            if(stopMovingWhileAttacking) // 공격중이 아닐때만 움직일 수 있게 하기
-            {
-                enemyPathfinding.StopMoving();
-            }
-
-            else
-            {
-                enemyPathfinding.Moveto(roamPosition);
-            }
-
-            StartCoroutine(AttackCoolDownRoutine());
+            isAttackInProgress = true; // 공격 진행 플래그 활성화
+            canAttack = false; // 공격 불가 상태로 변경
+            (enemyType as IEnemy)?.Attack(); // 공격 수행
+            enemyPathfinding.StopMoving(); // 이동 멈춤
+            StartCoroutine(FinishAttack()); // 공격 종료 처리
+            StartCoroutine(AttackCoolDownRoutine()); // 쿨다운 시작
         }
     }
 
-    private IEnumerator AttackCoolDownRoutine() // 공격 쿨타임
+    // 플레이어가 레이캐스트에 감지되는지 확인
+    private bool IsPlayerInRaycast(float range)
     {
+        Vector2 direction = (playerTransform.position - transform.position).normalized; // 레이 방향 계산
+        Debug.DrawRay(transform.position, direction * range, Color.red); // 레이 디버그 시각화
+
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, range, LayerMask.GetMask("Player"));
+        return hit.collider != null && hit.collider.CompareTag("Player");
+    }
+
+    private IEnumerator SwitchToTraceAfterAttack()
+    {
+        // 공격 종료될 때까지 대기
+        while (isAttackInProgress) yield return null;
+        state = State.Tracing; // 추적 상태로 전환
+    }
+
+    private IEnumerator FinishAttack()
+    {
+        // 공격 애니메이션 지속 시간 대기
+        yield return new WaitForSeconds(attackDuration);
+        isAttackInProgress = false; // 공격 진행 플래그 해제
+    }
+
+    private IEnumerator AttackCoolDownRoutine()
+    {
+        // 공격 쿨타임 대기
         yield return new WaitForSeconds(attackCoolDown);
-        canAttack = true;
-    }
-
-    // private IEnumerator RomingRoutine()
-    // {
-    //     while(state == State.Roming)
-    //     {
-    //         Vector2 roamPosition = GetRomingPosition();
-    //         enemyPathfinding.Moveto(roamPosition); //Pathfinding 클래스의 Moveto함수에 방향벡터 전달
-    //         yield return new WaitForSeconds(roamChangeDirFloat); 
-    //         // 2초동안 대기했다가 리턴함
-    //     }
-    // }
-
-    private Vector2 GetRomingPosition()
-    {
-        timeRoaming = 0f;
-        return new Vector2(Random.Range(-1f, 1f),Random.Range(-1f, 1f));
-        // x축, y축에 -1f~1f 사이의 랜덤값 벡터 리턴
+        canAttack = true; // 공격 가능 상태로 전환
     }
 }
