@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class EnemyAI : MonoBehaviour
 {
-    [SerializeField] private float rayLength = 10f; // 레이캐스트 길이
     [SerializeField] private float traceRange = 5f; // 추적 범위
     [SerializeField] private float attackDistance = 2f; // 공격 가능 거리
     [SerializeField] private MonoBehaviour enemyType; // 적 동작 클래스 (IEnemy 인터페이스 구현 필요)
